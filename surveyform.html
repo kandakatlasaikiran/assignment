@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Survey Form</title>
+  <style>
+    form {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      background-color: #000;
+      color: #fff;
+      padding: 10px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Survey Form</h1>
+  <form action="/submit-survey" method="post">
+    <input type="text" name="first_name" placeholder="First Name" required>
+    <input type="text" name="last_name" placeholder="Last Name" required>
+    <input type="date" name="date_of_birth" required>
+    <select name="country" required>
+      <option value="">Select Country</option>
+      <option value="India">India</option>
+      <option value="United States">United States</option>
+      <option value="United Kingdom">United Kingdom</option>
+    </select>
+    <input type="radio" name="gender" value="male"> Male
+    <input type="radio" name="gender" value="female"> Female
+    <input type="text" name="profession" placeholder="Profession" required>
+    <input type="email" name="email" placeholder="Email" required>
+    <input type="tel" name="mobile_number" placeholder="Mobile Number" required>
+    <button type="submit">Submit</button>
+    <button type="reset">Reset</button>
+  </form>
+  <script>
+    const form = document.querySelector('form');
+    form.addEventListener('submit', event => {
+      event.preventDefault();
+
+      const requiredFields = ['first_name', 'last_name', 'date_of_birth', 'country', 'profession', 'email', 'mobile_number'];
+      for (const field of requiredFields) {
+        const input = form.querySelector(`input[name="${field}"]`);
+        if (!input.value) {
+          alert(`Please fill in the ${field} field`);
+          return;
+        }
+      }
+
+      const popup = document.createElement('div');
+      popup.classList.add('popup');
+      popup.innerHTML = `
+        <h1>Survey Results</h1>
+        <ul>`;
+      for (const input of form.querySelectorAll('input')) {
+        popup.innerHTML += `<li>${input.name}: ${input.value}</li>`;
+      }
+      for (const select of form.querySelectorAll('select')) {
+        popup.innerHTML += `<li>${select.name}: ${select.value}</li>`;
+      }
+      popup.innerHTML += `</ul>
+        <button class="close-popup">Close</button>`;
+      document.body.appendChild(popup);
+
+      popup.querySelector('.close-popup').addEventListener('click', () => {
+        form.reset();
+        popup.remove();
+      });
+    });
+  </script>
+</body>
+</html>
